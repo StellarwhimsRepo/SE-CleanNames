@@ -16,11 +16,7 @@
    New-Item -path $badIDpath -type file
    New-Item -path $badNAMEpath -type file
    
-   #$filePath = 'F:\DedicatedServer\DataDir\VPS Dedicated 1\Saves\Sagittaron Sector\SANDBOX_0_0_0_.sbs'
-   $filePath = 'F:\DedicatedServer\DataDir\SE Survival 2\Saves\Sagittaron Sector\SANDBOX_0_0_0_.sbs'
-   #$filePath2 = 'F:\DedicatedServer\DataDir\VPS Dedicated 1\Saves\Sagittaron Sector\SANDBOX.sbc'
-   $filePath2 = 'F:\DedicatedServer\DataDir\SE Survival 2\Saves\Sagittaron Sector\SANDBOX.sbc'
-
+   Write-Host -ForegroundColor Green " loading saves ... "
    [xml]$myXML = Get-Content $filePath
    $ns = New-Object System.Xml.XmlNamespaceManager($myXML.NameTable)
    $ns.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance")
