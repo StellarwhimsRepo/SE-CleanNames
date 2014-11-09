@@ -4,6 +4,7 @@ SE-CleanNames
 Bad player and object names removal / rename
 
 **INTENDED FOR DEDICATED SERVERS
+
 *This script was designed to eliminate explosive save growth due to the special characters bug.
 
 If you intend to use these for commercial panel / virtual servers / personal use, go ahead. I just ask that you give me credit for it or leave a testimony of how it has benefited you here: http://forums.keenswh.com/post?id=7099011
