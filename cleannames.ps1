@@ -25,20 +25,38 @@
    $ns2 = New-Object System.Xml.XmlNamespaceManager($myXML2.NameTable)
    $ns2.AddNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance")
 
-   Write-Host -ForegroundColor Green " Checking for bad player names ... "
    $findinvalidplayer = $myXML2.SelectNodes("//Identities/MyObjectBuilder_Identity/DisplayName"  , $ns2)
+   $findinvalidpdata = $myXML2.SelectNodes("//AllPlayersData/dictionary/item/Value/DisplayName"  , $ns2)
+   $findinvalidDN = $myXML.SelectNodes("//SectorObjects/MyObjectBuilder_EntityBase/CubeBlocks/MyObjectBuilder_CubeBlock/DisplayName | //SectorObjects/MyObjectBuilder_EntityBase/CubeBlocks/MyObjectBuilder_CubeBlock/CustomName" ,$ns)
+   Write-Host -ForegroundColor Green " Checking for bad identity names ... "
    ForEach($player in $findinvalidplayer){
        IF($player.InnerText.Length -gt 50){
             $player.InnerXml
-            Write-Host -ForegroundColor Green " Bad ID deleted. "
+            Write-Host -ForegroundColor Green " deleting bad ID ... "
             Add-Content -Path $badIDpath -Value "$($player.InnerXml)"
             Add-Content -Path $badIDpath -Value "Bad ID deleted"
-            $Player.ParentNode.ParentNode.RemoveChild($Player.ParentNode)
+            $player.ParentNode.ParentNode.RemoveChild($player.ParentNode)
+            ForEach($pdata in $findinvalidpdata){
+            IF($pdata.ParentNode.IdentityId -eq $player.ParentNode.PlayerId){
+            $pdata.ParentNode.ParentNode.ParentNode.RemoveChild($pdata.ParentNode.ParentNode)
+            }
+            }
        }
    }
 
-   Write-Host -ForegroundColor Green " Checking for bad Display Names ... "
-   $findinvalidDN = $myXML.SelectNodes("//SectorObjects/MyObjectBuilder_EntityBase/CubeBlocks/MyObjectBuilder_CubeBlock/DisplayName | //SectorObjects/MyObjectBuilder_EntityBase/CubeBlocks/MyObjectBuilder_CubeBlock/CustomName" ,$ns)
+   Write-Host -ForegroundColor Green " Checking for bad playerdata names ... "
+   ForEach($pdata in $findinvalidpdata){
+       IF($pdata.InnerText.Length -gt 50){
+            $pdata.InnerXml
+            Write-Host -ForegroundColor Green " Bad ID deleted. "
+            Add-Content -Path $badIDpath -Value "$($pdata.InnerXml)"
+            Add-Content -Path $badIDpath -Value "Bad ID deleted"
+            Try{$pdata.ParentNode.ParentNode.ParentNode.RemoveChild($pdata.ParentNode.ParentNode)}
+            Catch{Write-Host -ForegroundColor Yellow "$error[-1]"}
+       }
+   }
+
+   Write-Host -ForegroundColor Green " Checking for bad block Names ... "
    ForEach($name in $findinvalidDN){
        IF($name.InnerText.Length -gt 300){
             $name.InnerXml
