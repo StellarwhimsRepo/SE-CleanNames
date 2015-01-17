@@ -28,6 +28,7 @@
    $findinvalidplayer = $myXML2.SelectNodes("//Identities/MyObjectBuilder_Identity/DisplayName"  , $ns2)
    $findinvalidpdata = $myXML2.SelectNodes("//AllPlayersData/dictionary/item/Value/DisplayName"  , $ns2)
    $findinvalidDN = $myXML.SelectNodes("//SectorObjects/MyObjectBuilder_EntityBase/CubeBlocks/MyObjectBuilder_CubeBlock/DisplayName | //SectorObjects/MyObjectBuilder_EntityBase/CubeBlocks/MyObjectBuilder_CubeBlock/CustomName" ,$ns)
+   $findinvalidBGN = $myXML.SelectNodes("//SectorObjects/MyObjectBuilder_EntityBase/BlockGroups/MyObjectBuilder_BlockGroup/Name" ,$ns)
    Write-Host -ForegroundColor Green " Checking for bad identity names ... "
    ForEach($player in $findinvalidplayer){
        IF($player.InnerText.Length -gt 50){
@@ -64,6 +65,18 @@
             Add-Content -Path $badNAMEpath -Value "$($name.InnerXml)"
             Add-Content -Path $badNAMEpath -Value "Bad Name detected. Name was reset."
             $name.InnerXML = "Name corrupted and reset"
+       }
+   }
+
+   Write-Host -ForegroundColor Green " Checking for bad block group names ... "
+   ForEach($group in $findinvalidBGN){
+       IF($group.InnerText.Length -gt 100){
+            $group.InnerXml
+            Write-Host -ForegroundColor Green " Bad Name detected. Name was reset."
+            Add-Content -Path $badNAMEpath -Value "$($group.InnerXml)"
+            Add-Content -Path $badNAMEpath -Value "Bad Name detected. Name was reset."
+            Try{$group.InnerXML = "Group Name was corrupted and was reset"}
+            Catch{Write-Host -ForegroundColor Yellow "$error[-1]"}
        }
    }
 
