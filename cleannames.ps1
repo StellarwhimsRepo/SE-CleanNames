@@ -38,7 +38,7 @@
             Add-Content -Path $badIDpath -Value "Bad ID deleted"
             $player.ParentNode.ParentNode.RemoveChild($player.ParentNode)
             ForEach($pdata in $findinvalidpdata){
-            IF($pdata.ParentNode.IdentityId -eq $player.ParentNode.PlayerId){
+            IF($pdata.ParentNode.IdentityId -eq $player.ParentNode.IdentityId){
             $pdata.ParentNode.ParentNode.ParentNode.RemoveChild($pdata.ParentNode.ParentNode)
             }
             }
